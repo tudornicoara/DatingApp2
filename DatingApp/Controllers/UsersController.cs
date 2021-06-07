@@ -19,7 +19,6 @@ namespace DatingApp.Controllers
         }
         
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
             if (!_context.Users.Any())
