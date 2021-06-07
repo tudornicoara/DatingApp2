@@ -23,7 +23,7 @@ namespace DatingApp
                 {
                     var context = services.GetRequiredService<DataContext>();
                     await context.Database.MigrateAsync();
-                    await DataContextSeed.SeedAsync(context);
+                    //await DataContextSeed.SeedAsync(context);
                 }
                 catch (Exception e)
                 {
