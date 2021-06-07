@@ -30,6 +30,14 @@ namespace DatingApp
             {
                 opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+            
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +62,8 @@ namespace DatingApp
             }
 
             app.UseRouting();
+            
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
@@ -72,7 +82,7 @@ namespace DatingApp
                 if (env.IsDevelopment())
                 {
                     //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseProxyToSpaDevelopmentServer("https://localhost:4200");
                 }
             });
         }
