@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using DatingApp.Extensions;
 
 namespace DatingApp.Entities
@@ -22,9 +23,7 @@ namespace DatingApp.Entities
         public string Country { get; set; }
         public ICollection<Photo> Photos { get; set; }
 
-        // public int GetAge()
-        // {
-        //     return DateOfBirth.CalculateAge();
-        // }
+        public ICollection<UserLike> LikedByUsers { get; set; }
+        public ICollection<UserLike> LikedUsers { get; set; }
     }
 }
