@@ -35,6 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ClientApp\src\app\admin" />
       <Folder Include="ClientApp\src\app\errors" />
       <Folder Include="ClientApp\src\app\_forms" />
       <Folder Include="ClientApp\src\app\_guards" />
