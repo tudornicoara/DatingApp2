@@ -37,7 +37,7 @@
       <Folder Include="ClientApp\src\app\errors" />
       <Folder Include="ClientApp\src\app\_forms" />
       <Folder Include="ClientApp\src\app\_guards" />
-      <Folder Include="ClientApp\src\app\_services" />
+      <Folder Include="ClientApp\src\app\_resolvers" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
