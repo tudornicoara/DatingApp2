@@ -37,6 +37,8 @@
     <ItemGroup>
       <Folder Include="ClientApp\src\app\admin" />
       <Folder Include="ClientApp\src\app\errors" />
+      <Folder Include="ClientApp\src\app\modals" />
+      <Folder Include="ClientApp\src\app\_directives" />
       <Folder Include="ClientApp\src\app\_forms" />
       <Folder Include="ClientApp\src\app\_guards" />
       <Folder Include="ClientApp\src\app\_resolvers" />
