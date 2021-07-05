@@ -13,8 +13,8 @@ import {Router} from "@angular/router";
 export class PresenceService {
   hubUrl = environment.hubUrl;
   private hubConnection: HubConnection;
-  private onlineUserSource = new BehaviorSubject<string[]>([]);
-  onlineUsers$ = this.onlineUserSource.asObservable();
+  private onlineUsersSource = new BehaviorSubject<string[]>([]);
+  onlineUsers$ = this.onlineUsersSource.asObservable();
 
   constructor(private toastr: ToastrService, private router: Router) { }
 
@@ -32,18 +32,18 @@ export class PresenceService {
 
     this.hubConnection.on('UserIsOnline', username => {
       this.onlineUsers$.pipe(take(1)).subscribe(usernames => {
-        this.onlineUserSource.next([...usernames, username])
+        this.onlineUsersSource.next([...usernames, username])
       })
     })
 
     this.hubConnection.on('UserIsOffline', username => {
-     this.onlineUsers$.pipe(take(1)).subscribe(usernames => {
-       this.onlineUserSource.next([...usernames.filter(x => x !== username)])
-     })
+      this.onlineUsers$.pipe(take(1)).subscribe(usernames => {
+        this.onlineUsersSource.next([...usernames.filter(x => x !== username)])
+      })
     })
 
     this.hubConnection.on('GetOnlineUsers', (usernames: string[]) => {
-      this.onlineUserSource.next(usernames);
+      this.onlineUsersSource.next(usernames);
     })
 
     this.hubConnection.on('NewMessageReceived', ({username, knownAs}) => {

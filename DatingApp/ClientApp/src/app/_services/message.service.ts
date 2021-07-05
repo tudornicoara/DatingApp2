@@ -46,7 +46,7 @@ export class MessageService {
         this.messageThread$.pipe(take(1)).subscribe(messages => {
           messages.forEach(message => {
             if (!message.dateRead) {
-              message.dateRead = new Date(Date.now());
+              message.dateRead = new Date(Date.now())
             }
           })
           this.messageThreadSource.next([...messages]);
@@ -64,7 +64,6 @@ export class MessageService {
   getMessages(pageNumber, pageSize, container) {
     let params = getPaginationHeaders(pageNumber, pageSize);
     params = params.append('Container', container);
-
     return getPaginatedResult<Message[]>(this.baseUrl + 'messages', params, this.http);
   }
 
