@@ -1,14 +1,16 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Member} from "../../_models/member";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions} from "@kolkov/ngx-gallery";
 import {TabDirective, TabsetComponent} from "ngx-bootstrap/tabs";
 import {MessageService} from "../../_services/message.service";
-import {Message} from "../../_models/message";
 import {PresenceService} from "../../_services/presence.service";
 import {AccountService} from "../../_services/account.service";
-import {User} from "../../_models/user";
 import {take} from "rxjs/operators";
+import {MembersService} from "../../_services/members.service";
+import {ToastrService} from "ngx-toastr";
+import {Member} from "../../_models/member";
+import {Message} from "../../_models/message";
+import {User} from "../../_models/user";
 
 @Component({
   selector: 'app-member-detail',
@@ -26,7 +28,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
   constructor(public presence: PresenceService, private route: ActivatedRoute,
               private messageService: MessageService, private accountService: AccountService,
-              private router: Router) {
+              private router: Router, private membersService: MembersService,
+              private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
@@ -52,6 +55,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     ]
 
     this.galleryImages = this.getImages();
+  }
+
+  addLike() {
+    this.membersService.addLike(this.member.username).subscribe(() => {
+      this.toastr.success("You have liked " + this.member.knownAs);
+    });
   }
 
   getImages(): NgxGalleryImage[] {
