@@ -19,6 +19,5 @@ namespace DatingApp.Interfaces
         Task<Message> GetMessage(Guid id);
         Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams);
         Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername);
-        Task<bool> SaveAllAsync();
     }
 }
