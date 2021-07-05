@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using DatingApp.Dtos;
 using DatingApp.Entities;
@@ -25,6 +26,7 @@ namespace DatingApp.Helpers
                 .ForMember(dest => dest.RecipientPhotoUrl,
                     opt => opt.MapFrom(src =>
                         src.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         }
     }
 }
