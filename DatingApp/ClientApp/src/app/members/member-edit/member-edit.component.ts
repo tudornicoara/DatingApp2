@@ -1,11 +1,11 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Member} from "../../_models/member";
-import {User} from "../../_models/user";
 import {AccountService} from "../../_services/account.service";
 import {MembersService} from "../../_services/members.service";
 import {take} from "rxjs/operators";
 import {ToastrService} from "ngx-toastr";
 import {NgForm} from "@angular/forms";
+import {Member} from "../../_models/member";
+import {User} from "../../_models/user";
 
 @Component({
   selector: 'app-member-edit',

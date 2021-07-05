@@ -12,6 +12,7 @@ namespace DatingApp.Interfaces
         void Update(AppUser user);
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(Guid id);
+        Task<AppUser> GetUserByPhotoId(Guid photoId);
         Task<AppUser> GetUserByUsernameAsync(string username);
         Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
         Task<MemberDto> GetMemberAsync(string username);

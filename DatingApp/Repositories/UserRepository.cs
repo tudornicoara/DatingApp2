@@ -40,6 +40,15 @@ namespace DatingApp.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
         
+        public async Task<AppUser> GetUserByPhotoId(Guid photoId)
+        {
+            return await _context.Users
+                .Include(p => p.Photos)
+                .IgnoreQueryFilters()
+                .Where(p => p.Photos.Any(p => p.Id == photoId))
+                .FirstOrDefaultAsync();
+        }
+        
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
             return await _context.Users
