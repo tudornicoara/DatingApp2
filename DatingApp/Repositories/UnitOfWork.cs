@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.Interfaces;
+using DatingApp.Repositories;
 
 namespace DatingApp.Data
 {

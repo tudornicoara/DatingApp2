@@ -1,49 +1,60 @@
-using System;
-using System.Threading.Tasks;
 using DatingApp.Data;
 using DatingApp.Entities;
-using Microsoft.AspNetCore.Hosting;
+using DatingApp.Extensions;
+using DatingApp.Middleware;
+using DatingApp.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace DatingApp
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAplicationServices(builder.Configuration);
+builder.Services.AddControllersWithViews();
+builder.Services.AddCors(opt =>
 {
-    public class Program
+    opt.AddPolicy("CorsPolicy", policy =>
     {
-        public static async Task Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("https://localhost:4200");
+    });
+});
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddSignalR();
 
-                try
-                {
-                    var context = services.GetRequiredService<DataContext>();
-                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-                    await context.Database.MigrateAsync();
-                    await Seed.SeedUsers(userManager, roleManager);
-                }
-                catch (Exception e)
-                {
-                    var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(e, "An error occured during migration");
-                }
-            }
+var app = builder.Build();
 
-            await host.RunAsync();
-        }
+app.UseMiddleware<ExceptionMiddleware>();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+app.UseHttpsRedirection();
+
+app.UseRouting();
+            
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(userManager, roleManager);
 }
+catch (Exception e)
+{
+    var logger = loggerFactory.CreateLogger<Program>();
+    logger.LogError(e, "An error occured during migration");
+}
+
+app.Run();
